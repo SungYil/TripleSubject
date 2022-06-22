@@ -25,7 +25,7 @@ gradle 7.4.1
 Method|HTTP request|Description
 ---|---|---|
 GET   | /points            | 전체유저 point 조회
-GET   | /points/{userId}   | userId와 일치하는 point 조회
+GET   | /points?userId={userId}   | userId와 일치하는 point 조회
 POST  | /events            | action : ADD 리뷰 추가
 POST  | /events   | action : MOD 리뷰 수정
 POST  | /events | action : 리뷰 삭제
@@ -97,7 +97,7 @@ Code 200 등록 성공
 Code 400 등록 실패
 ```
    {
-    "message" : "userId 형식이 유효하지 않습니다" or "placeId 형식이 유효하지 않습니다." or "attachedPhotoIds 형식이 유효하지 않습니다"
+    "message" : "userId 형식이 유효하지 않습니다" or "placeId 형식이 유효하지 않습니다." or "attachedPhotoIds 형식이 유효하지 않습니다" or "해당 장소에 대한 리뷰를 이미 작성했습니다."
    }
 ```
 -----------------
