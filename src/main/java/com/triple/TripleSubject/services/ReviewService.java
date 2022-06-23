@@ -110,10 +110,10 @@ public class ReviewService {
 
         //포인트 계산
         int point = 0;
-        if(review.getContent().length() > 0 && eventDto.getContent().length()==0){
+        if(review.getContent().length() > 0 && eventDto.getContent().isEmpty()){
             point --;
         }
-        if(review.getContent().length() == 0 && eventDto.getContent().length() > 0){
+        if(!review.getContent().isEmpty() && eventDto.getContent().length() > 0){
             point++;
         }
 
@@ -167,8 +167,6 @@ public class ReviewService {
         for(Event e: event) {
             point+=e.getPointDelta();
         }
-
-        System.out.println(user.getUuid()+" "+user.getAchievePoint());
 
         user.setAchievePoint(user.getAchievePoint()-point);
         userRepository.save(user);
