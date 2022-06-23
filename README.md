@@ -25,10 +25,10 @@ gradle 7.4.1
 Method|HTTP request|Description
 ---|---|---|
 GET   | /points            | 전체유저 point 조회
-GET   | /points?userId={userId}   | userId와 일치하는 point 조회
+GET   | /users/{userId}/points  | userId와 일치하는 point 조회
 POST  | /events            | action : ADD 리뷰 추가
 POST  | /events   | action : MOD 리뷰 수정
-POST  | /events | action : 리뷰 삭제
+POST  | /events | action : DELETE 리뷰 삭제
 --------------------------------
 
 ##### GET   /points    전체유저 point 조회
@@ -97,7 +97,16 @@ Code 200 등록 성공
 Code 400 등록 실패
 ```
    {
-    "message" : "userId 형식이 유효하지 않습니다" or "placeId 형식이 유효하지 않습니다." or "attachedPhotoIds 형식이 유효하지 않습니다" or "해당 장소에 대한 리뷰를 이미 작성했습니다."
+    "message" : "userId 형식이 유효하지 않습니다"
+     or "placeId 형식이 유효하지 않습니다." 
+    or "attachedPhotoIds 형식이 유효하지 않습니다" 
+   }
+```
+
+Code 409 등록 실패
+```
+   {
+    "message" : "해당 장소에 대한 리뷰를 이미 작성했습니다."
    }
 ```
 -----------------
@@ -120,14 +129,18 @@ Code 200 수정 성공
 Code 400 수정 실패
 ```
    {
-    "message" : "userId 형식이 유효하지 않습니다" or "placeId 형식이 유효하지 않습니다." or "attachedPhotoIds 형식이 유효하지 않습니다"
+    "message" : "userId 형식이 유효하지 않습니다" 
+    or "placeId 형식이 유효하지 않습니다." 
+    or "attachedPhotoIds 형식이 유효하지 않습니다"
    }
 ```
 
 Code 404 수정 실패
 ```
    {
-    "message" : "일치하는 userId가 없습니다." or "일치하는 reviewId가 없습니다." or "일치하는 placeId가 없습니다."
+    "message" : "일치하는 userId가 없습니다." 
+    or "일치하는 reviewId가 없습니다." 
+    or "일치하는 placeId가 없습니다."
    }
 ```
 
@@ -142,13 +155,18 @@ Code 200 삭제 성공
 Code 400 삭제 실패
 ```
    {
-    "message" : "userId 형식이 유효하지 않습니다" or "placeId 형식이 유효하지 않습니다." or "attachedPhotoIds 형식이 유효하지 않습니다"
+    "message" : "userId 형식이 유효하지 않습니다" 
+    or "placeId 형식이 유효하지 않습니다." 
+    or "attachedPhotoIds 형식이 유효하지 않습니다"
+    or "리뷰작성자가 아닙니다"
    }
 ```
 
 Code 404 삭제 실패
 ```
    {
-    "message" : "일치하는 userId가 없습니다." or "일치하는 reviewId가 없습니다." or "일치하는 placeId가 없습니다."
+    "message" : "일치하는 userId가 없습니다." 
+    or "일치하는 reviewId가 없습니다." 
+    or "일치하는 placeId가 없습니다."
    }
 ```
