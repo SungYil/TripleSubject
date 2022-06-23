@@ -31,6 +31,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicatedException(DuplicatedException exception){
         log.warn(exception.getMessage());
         ErrorResponse response = new ErrorResponse(exception.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 }
