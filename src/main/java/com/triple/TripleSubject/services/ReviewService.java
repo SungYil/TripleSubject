@@ -76,7 +76,7 @@ public class ReviewService {
 
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
-        if(reviewRepository.findByUuid(eventDto.getReviewId())!=null)
+        if(reviewRepository.existsByUuid(eventDto.getReviewId())!=null)
             throw new ValidationException("reviewId가 존재합니다.");
         
         Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
@@ -102,7 +102,7 @@ public class ReviewService {
         Place place = placeRepository.findByUuid(eventDto.getPlaceId());
         if(place==null) throw new DataNotFoundException("일치하는 placeId가 없습니다.");
 
-        Review review = reviewRepository.findByUuid(eventDto.getReviewId());
+        Review review = reviewRepository.existsByUuid(eventDto.getReviewId());
         if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         User user = userRepository.findByUuid(eventDto.getUserId());
@@ -155,7 +155,7 @@ public class ReviewService {
         User user = userRepository.findByUuid(eventDto.getUserId());
         if(user == null) throw new DataNotFoundException("일치하는 userId가 없습니다.");
 
-        Review review = reviewRepository.findByUuid(eventDto.getReviewId());
+        Review review = reviewRepository.existsByUuid(eventDto.getReviewId());
         if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         if(!review.getCreator().getUuid().equals(user.getUuid()))
