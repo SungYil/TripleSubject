@@ -34,35 +34,31 @@ class TripleSubjectApplicationTests {
 	void contextLoads() {
 	}
 
-	@Test
-	void whenPostReview_thenOk()throws Exception{
 
+	@Test
+	void whenGetPoint_thenOk()throws Exception{
+		var result=requestGet("/points");
+
+		result.andDo(print()).andExpect(status().isOk());
 	}
 
 	@Test
 	void whenGetPointByUserId_thenOk()throws Exception{
-		var result=requestGet("/points/3ede0ef2-92b7-4817-a5f3-0c575361f745");
+		var result=requestGet("/users/3ede0ef2-92b7-4817-a5f3-0c575361f123/points");
 
 		result.andDo(print()).andExpect(status().isOk());
 	}
 	@Test
 	void whenGetPointByUserIdWithNotFoundId_thenError()throws Exception{
-		var result=requestGet("/points/3ede0ef2-92b7-4817-a5f3-0c575361f123");
+		var result=requestGet("/users/3ede0ef2-92b7-4817-a5f3-0c575361f124/points");
 
 		result.andDo(print()).andExpect(status().isNotFound());
 	}
 	@Test
 	void whenGetPointByUserIdWithTypeError_thenError()throws Exception{
-		var result = requestGet("/points/1234");
+		var result = requestGet("/users/3ede0ef2-92b7-4817-a5f3-/points");
 
 		result.andDo(print()).andExpect(status().isBadRequest());
-	}
-
-	@Test
-	void whenGetPoint_thenOk()throws Exception{
-		var result = requestGet("/points");
-
-		result.andDo(print()).andExpect(status().isOk());
 	}
 
 	@Test
