@@ -22,6 +22,8 @@ public class EventController {
 
         if ("ADD".equals(eventDto.getAction())) {
             eventService.postAddEvent(eventDto);
+        }else if("MOD".equals(eventDto.getAction())){
+            eventService.postModEvent(eventDto);
         }
 
         return eventDto;

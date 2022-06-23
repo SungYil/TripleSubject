@@ -98,21 +98,48 @@ class TripleSubjectApplicationTests {
 
 	@Test
 	void whenPostEventMod_thenOk()throws Exception{
-		/*var result=request(new EventRequest(),"/events");
+		List<String> images=new ArrayList<>();
+		//images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		//images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"MOD",
+				"240a0658-dc5f-4878-9381-ebb7b2667772",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
 
-		result.andDo(print()).andExpect(status().isOk());*/
+		result.andDo(print()).andExpect(status().isOk());
 	}
 	@Test
 	void whenPostEventModWithTypeError_thenError()throws Exception{
-		/*var result=requestPost(new EventRequest(),"/events");
+		List<String> images=new ArrayList<>();
+		images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"MOD",
+				"240a0658-dc5f-4878-9381-ebb7b2667772",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
 
-		result.andDo(print()).andExpect(status().isBadRequest());*/
+		result.andDo(print()).andExpect(status().isBadRequest());
 	}
 	@Test
 	void whenPostEventModWithNotFoundError_thenError()throws Exception{
-		/*var result = requestPost(new EventRequest(),"/events");
+		List<String> images=new ArrayList<>();
+		images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"MOD",
+				"240a0658-dc5f-4878-9381-ebb7b2667772",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f745",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
 
-		result.andDo(print()).andExpect(status().isNotFound());*/
+		result.andDo(print()).andExpect(status().isNotFound());
 	}
 
 	@Test
