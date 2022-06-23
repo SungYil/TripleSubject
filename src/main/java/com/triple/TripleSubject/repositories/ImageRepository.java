@@ -12,6 +12,6 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image,Long> {
     @Query(value="select i from Image i where i.uuid=:uuid")
     Image findByUuid(String uuid);
-    @Query(value="select i from Image i, Review r where r.id=:reviewId")
+    @Query(value="select i from Image i join Review r on i.review=r.id where r.id=:reviewId")
     List<Image> findByReviewId(long reviewId);
 }

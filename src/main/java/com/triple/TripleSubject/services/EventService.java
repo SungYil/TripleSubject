@@ -73,12 +73,13 @@ public class EventService {
             userRepository.save(user);
         else
             user=userRepository.findByUuid(eventDto.getUserId());
-
         duplicator.reviewDuplicatedCheck(user,place,"해당 장소에 대한 리뷰를 이미 작성했습니다.");
 
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
-
+        if(reviewRepository.findByUuid(eventDto.getReviewId())!=null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"reviewId가 존재합니다.");
+        
         Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).build();
 
         reviewRepository.save(review);

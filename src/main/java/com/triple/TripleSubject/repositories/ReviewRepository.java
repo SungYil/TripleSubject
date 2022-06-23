@@ -13,7 +13,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review,Long> {
     Review findByUuid(String uuid);
 
-    @Query(value="select r from Review r,Place p,User u where p.id=:placeId AND u.id=:userId")
+    @Query(value="select r from Review r join Place p on r.place = p.id join User u on r.creator = u.id where p.id=:placeId AND u.id=:userId AND r.state=0")
     Review findByUserIdWithPlaceId(long userId, long placeId);
 
     List<Review> findByPlaceId(long placeId);
