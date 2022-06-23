@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class EventService {
+public class ReviewService {
 
     @Autowired
     private EventRepository eventRepository;
@@ -40,7 +40,7 @@ public class EventService {
     private Duplicator duplicator;
 
     @Transactional
-    public EventDto postAddEvent(EventDto eventDto){
+    public EventDto postAddReview(EventDto eventDto){
         validating(eventDto);
 
         for(String imageUuid:eventDto.getAttachedPhotoIds()){
@@ -92,7 +92,7 @@ public class EventService {
     }
 
     @Transactional
-    public EventDto postModEvent(EventDto eventDto){
+    public EventDto postModReview(EventDto eventDto){
         validating(eventDto);
 
         for(String imageUuid:eventDto.getAttachedPhotoIds()){
@@ -146,7 +146,7 @@ public class EventService {
     }
 
     @Transactional
-    public void postDeleteEvent(EventDto eventDto){
+    public void postDeleteReview(EventDto eventDto){
         validating(eventDto);
 
         Place place = placeRepository.findByUuid(eventDto.getPlaceId());
