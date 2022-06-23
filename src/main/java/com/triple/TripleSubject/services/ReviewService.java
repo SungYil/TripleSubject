@@ -129,8 +129,8 @@ public class ReviewService {
         userRepository.save(user);
 
         review.setState(ReviewState.notAlive);
-        review.setUuid("");
         reviewRepository.save(review);
+
         review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
         reviewRepository.save(review);
@@ -172,7 +172,6 @@ public class ReviewService {
         userRepository.save(user);
 
         review.setState(ReviewState.notAlive);
-        review.setUuid("");
         reviewRepository.save(review);
 
         Event e=Event.builder().review(review).user(user).event(eventDto).pointDelta(-1*point).place(place).build();
