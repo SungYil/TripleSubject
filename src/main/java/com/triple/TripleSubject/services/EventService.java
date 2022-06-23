@@ -41,9 +41,8 @@ public class EventService {
 
     @Transactional
     public EventDto postAddEvent(EventDto eventDto){
-        validator.validateUuid(eventDto.getUserId(),"userId 형식이 유효하지 않습니다.");
-        validator.validateUuid(eventDto.getPlaceId(),"placeId 형식이 유효하지 않습니다.");
-        validator.validateUuid(eventDto.getReviewId(),"reviewId 형식이 유효하지 않습니다.");
+        validating(eventDto);
+
         for(String imageUuid:eventDto.getAttachedPhotoIds()){
             validator.validateUuid(imageUuid,"imageId 형식이 유효하지 않습니다.");
         }
@@ -80,7 +79,7 @@ public class EventService {
         if(reviewRepository.findByUuid(eventDto.getReviewId())!=null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"reviewId가 존재합니다.");
         
-        Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).build();
+        Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
 
         reviewRepository.save(review);
         for(String imageUuid : eventDto.getAttachedPhotoIds()){
@@ -94,9 +93,8 @@ public class EventService {
 
     @Transactional
     public EventDto postModEvent(EventDto eventDto){
-        validator.validateUuid(eventDto.getUserId(),"userId 형식이 유효하지 않습니다.");
-        validator.validateUuid(eventDto.getPlaceId(),"placeId 형식이 유효하지 않습니다.");
-        validator.validateUuid(eventDto.getReviewId(),"reviewId 형식이 유효하지 않습니다.");
+        validating(eventDto);
+
         for(String imageUuid:eventDto.getAttachedPhotoIds()){
             validator.validateUuid(imageUuid,"imageId 형식이 유효하지 않습니다.");
         }
@@ -137,7 +135,7 @@ public class EventService {
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
         reviewRepository.save(review);
 
-        Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).build();
+        Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
         eventRepository.save(event);
 
         for(String imageUuid : eventDto.getAttachedPhotoIds()){
@@ -145,5 +143,47 @@ public class EventService {
             imageRepository.save(image);
         }
         return eventDto;
+    }
+
+    @Transactional
+    public void postDeleteEvent(EventDto eventDto){
+        validating(eventDto);
+
+        Place place = placeRepository.findByUuid(eventDto.getPlaceId());
+        if(place==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 placeId가 없습니다.");
+
+        User user = userRepository.findByUuid(eventDto.getUserId());
+        if(user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 userId가 없습니다.");
+
+        Review review = reviewRepository.findByUuid(eventDto.getReviewId());
+        if(review == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 reviewId가 없습니다.");
+
+        if(!review.getCreator().getUuid().equals(user.getUuid()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"리뷰 작성자가 아닙니다.");
+
+        List<Event> event=eventRepository.findByUserId(user.getId(),place.getId());
+        if(event == null)return;
+        int point=0;
+        for(Event e: event) {
+            point+=e.getPointDelta();
+        }
+
+        System.out.println(user.getUuid()+" "+user.getAchievePoint());
+
+        user.setAchievePoint(user.getAchievePoint()-point);
+        userRepository.save(user);
+
+        review.setState(ReviewState.notAlive);
+        review.setUuid("");
+        reviewRepository.save(review);
+
+        Event e=Event.builder().review(review).user(user).event(eventDto).pointDelta(-1*point).place(place).build();
+        eventRepository.save(e);
+    }
+
+    public void validating(EventDto eventDto){
+        validator.validateUuid(eventDto.getUserId(),"userId 형식이 유효하지 않습니다.");
+        validator.validateUuid(eventDto.getPlaceId(),"placeId 형식이 유효하지 않습니다.");
+        validator.validateUuid(eventDto.getReviewId(),"reviewId 형식이 유효하지 않습니다.");
     }
 }

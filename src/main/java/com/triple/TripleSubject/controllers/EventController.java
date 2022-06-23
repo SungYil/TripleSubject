@@ -24,6 +24,8 @@ public class EventController {
             eventService.postAddEvent(eventDto);
         }else if("MOD".equals(eventDto.getAction())){
             eventService.postModEvent(eventDto);
+        }else if("DELETE".equals(eventDto.getAction())){
+            eventService.postDeleteEvent(eventDto);
         }
 
         return eventDto;

@@ -72,7 +72,7 @@ class TripleSubjectApplicationTests {
 		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
 		var result = requestPost(new EventDto("REVIEW",
 				"ADD",
-				"240a0658-dc5f-4878-9381-ebb7b2667713",
+				"240a0658-dc5f-4878-9381-ebb7b2667715",
 				"좋아요!",
 				images,
 				"3ede0ef2-92b7-4817-a5f3-0c575361f123",
@@ -103,7 +103,7 @@ class TripleSubjectApplicationTests {
 		//images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
 		var result = requestPost(new EventDto("REVIEW",
 				"MOD",
-				"240a0658-dc5f-4878-9381-ebb7b2667712",
+				"240a0658-dc5f-4878-9381-ebb7b2667714",
 				"123",
 				images,
 				"3ede0ef2-92b7-4817-a5f3-0c575361f000",
@@ -144,15 +144,49 @@ class TripleSubjectApplicationTests {
 
 	@Test
 	void whenPostEventDelete_thenOk()throws Exception{
-		/*var result = requestPost(new EventRequest(),"/events");
+		List<String> images=new ArrayList<>();
+		images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"DELETE",
+				"240a0658-dc5f-4878-9381-ebb7b2667714",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f000",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
 
-		result.andDo(print()).andExpect(status().isOk());*/
+		result.andDo(print()).andExpect(status().isOk());
 	}
 	@Test
 	void whenPostEventDeleteWithNotFoundError_thenError()throws Exception{
-		/*var result = requestPost(new EventRequest(),"/events");
+		List<String> images=new ArrayList<>();
+		images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"DELETE",
+				"240a0658-dc5f-4878-9381-ebb7b2667714",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f000",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
 
-		result.andDo(print()).andExpect(status().isOk());*/
+		result.andDo(print()).andExpect(status().isNotFound());
+	}
+
+	@Test
+	void whenPostEventDeleteWithTypeError_thenError()throws Exception{
+		List<String> images=new ArrayList<>();
+		images.add("e4d1a64e-a531-46de-88d0-ff0ed70c0bb8");
+		images.add("afb0cef2-851d-4a50-bb07-9cc15cbdc332");
+		var result = requestPost(new EventDto("REVIEW",
+				"DELETE",
+				"240a0658-dc5f-4878-9381-ebb7b2667715",
+				"123",
+				images,
+				"3ede0ef2-92b7-4817-a5f3-0c575361f000",
+				"2e4baf1c-5acb-4efb-a1af-eddada31b00f"),"/events");
+
+		result.andDo(print()).andExpect(status().isBadRequest());
 	}
 
 	ResultActions requestPost(Object request,String path) throws Exception{
