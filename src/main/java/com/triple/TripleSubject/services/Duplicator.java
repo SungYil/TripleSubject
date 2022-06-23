@@ -1,4 +1,4 @@
-package com.triple.TripleSubject.util;
+package com.triple.TripleSubject.services;
 
 import com.triple.TripleSubject.entities.Place;
 import com.triple.TripleSubject.entities.User;
