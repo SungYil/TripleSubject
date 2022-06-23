@@ -2,6 +2,7 @@ package com.triple.TripleSubject.handlers;
 
 import com.triple.TripleSubject.dtos.ErrorResponse;
 import com.triple.TripleSubject.exceptions.CheckedException;
+import com.triple.TripleSubject.exceptions.DataNotFoundException;
 import com.triple.TripleSubject.exceptions.DuplicatedException;
 import com.triple.TripleSubject.exceptions.ValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,5 +33,12 @@ public class GlobalExceptionHandler {
         log.warn(exception.getMessage());
         ErrorResponse response = new ErrorResponse(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDataNotFoundException(DataNotFoundException exception){
+        log.warn(exception.getMessage());
+        ErrorResponse response = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

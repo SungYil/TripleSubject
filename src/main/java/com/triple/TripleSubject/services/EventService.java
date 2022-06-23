@@ -3,6 +3,8 @@ package com.triple.TripleSubject.services;
 import com.triple.TripleSubject.dtos.EventDto;
 import com.triple.TripleSubject.entities.*;
 import com.triple.TripleSubject.enums.ReviewState;
+import com.triple.TripleSubject.exceptions.DataNotFoundException;
+import com.triple.TripleSubject.exceptions.ValidationException;
 import com.triple.TripleSubject.repositories.*;
 import com.triple.TripleSubject.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +77,7 @@ public class EventService {
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
         if(reviewRepository.findByUuid(eventDto.getReviewId())!=null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"reviewId가 존재합니다.");
+            throw new ValidationException("reviewId가 존재합니다.");
         
         Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
 
@@ -98,13 +100,13 @@ public class EventService {
         }
 
         Place place = placeRepository.findByUuid(eventDto.getPlaceId());
-        if(place==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 placeId가 없습니다.");
+        if(place==null) throw new DataNotFoundException("일치하는 placeId가 없습니다.");
 
         Review review = reviewRepository.findByUuid(eventDto.getReviewId());
-        if(review == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 reviewId가 없습니다.");
+        if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         User user = userRepository.findByUuid(eventDto.getUserId());
-        if(user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 userId가 없습니다.");
+        if(user == null) throw new DataNotFoundException("일치하는 userId가 없습니다.");
 
         //포인트 계산
         int point = 0;
@@ -148,16 +150,16 @@ public class EventService {
         validating(eventDto);
 
         Place place = placeRepository.findByUuid(eventDto.getPlaceId());
-        if(place==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 placeId가 없습니다.");
+        if(place==null) throw new DataNotFoundException("일치하는 placeId가 없습니다.");
 
         User user = userRepository.findByUuid(eventDto.getUserId());
-        if(user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 userId가 없습니다.");
+        if(user == null) throw new DataNotFoundException("일치하는 userId가 없습니다.");
 
         Review review = reviewRepository.findByUuid(eventDto.getReviewId());
-        if(review == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"일치하는 reviewId가 없습니다.");
+        if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         if(!review.getCreator().getUuid().equals(user.getUuid()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"리뷰 작성자가 아닙니다.");
+            throw new ValidationException("리뷰 작성자가 아닙니다.");
 
         List<Event> event=eventRepository.findByUserId(user.getId(),place.getId());
         if(event == null)return;
