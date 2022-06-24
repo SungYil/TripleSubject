@@ -70,9 +70,10 @@ public class ReviewService {
         User user=User.builder().uuid(eventDto.getUserId()).achievePoint(point).build();
         if(duplicator.userDuplicatedCheck(user))
             userRepository.save(user);
-        else
-            user=userRepository.findByUuid(eventDto.getUserId());
-        user.setAchievePoint(user.getAchievePoint()+point);
+        else {
+            user = userRepository.findByUuid(eventDto.getUserId());
+            user.setAchievePoint(user.getAchievePoint() + point);
+        }
         duplicator.reviewDuplicatedCheck(user,place,"해당 장소에 대한 리뷰를 이미 작성했습니다.");
 
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
