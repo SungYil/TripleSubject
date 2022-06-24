@@ -56,13 +56,13 @@ public class ReviewService {
 
         //포인트 계산
         int point=0;
-        if(reviewRepository.findByPlaceId(place.getId()).size()==0){
+        if(reviewRepository.findByPlaceId(place.getId()).isEmpty()){
             point++;
         }
-        if(eventDto.getAttachedPhotoIds().size()>0){
+        if(!eventDto.getAttachedPhotoIds().isEmpty()){
             point++;
         }
-        if(eventDto.getContent().length()>0){
+        if(!eventDto.getContent().isEmpty()){
             point++;
         }
 
@@ -72,6 +72,7 @@ public class ReviewService {
             userRepository.save(user);
         else
             user=userRepository.findByUuid(eventDto.getUserId());
+        user.setAchievePoint(user.getAchievePoint()+point);
         duplicator.reviewDuplicatedCheck(user,place,"해당 장소에 대한 리뷰를 이미 작성했습니다.");
 
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
