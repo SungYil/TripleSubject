@@ -1,6 +1,7 @@
 package com.triple.TripleSubject.controllers;
 
 import com.triple.TripleSubject.dtos.EventDto;
+import com.triple.TripleSubject.enums.EventAction;
 import com.triple.TripleSubject.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +19,11 @@ public class EventController {
     @RequestMapping(method = RequestMethod.POST)
     public EventDto postEvent(@RequestBody EventDto eventDto){
 
-        if ("ADD".equals(eventDto.getAction())) {
+        if (EventAction.ADD.name().equals(eventDto.getAction())) {
             reviewService.postAddReview(eventDto);
-        }else if("MOD".equals(eventDto.getAction())){
+        }else if(EventAction.MOD.name().equals(eventDto.getAction())){
             reviewService.postModReview(eventDto);
-        }else if("DELETE".equals(eventDto.getAction())){
+        }else if(EventAction.DELETE.name().equals(eventDto.getAction())){
             reviewService.postDeleteReview(eventDto);
         }
 
