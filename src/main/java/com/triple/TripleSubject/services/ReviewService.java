@@ -127,7 +127,7 @@ public class ReviewService {
         }
 
         int imageSize=imageRepository.countByReviewId(review.getId());
-        if(imageSize>0 && eventDto.getAttachedPhotoIds().size()==0){
+        if(imageSize>0 && eventDto.getAttachedPhotoIds().isEmpty()){
             point --;
         }
         if(imageSize==0 && eventDto.getAttachedPhotoIds().size()>0){
