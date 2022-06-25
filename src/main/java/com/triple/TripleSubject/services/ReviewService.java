@@ -110,6 +110,12 @@ public class ReviewService {
         User user = userRepository.findByUuid(eventDto.getUserId());
         if(user == null) throw new DataNotFoundException("일치하는 userId가 없습니다.");
 
+        if(!review.getCreator().getUuid().equals(user.getUuid()))
+            throw new ValidationException("리뷰 작성자가 아닙니다.");
+
+        if(!review.getPlace().getUuid().equals(place.getUuid()))
+            throw new ValidationException("해당 장소에 대한 리뷰가 아닙니다.");
+
         //포인트 계산
         int point = 0;
         if(!review.getContent().isEmpty() && eventDto.getContent().isEmpty()){
