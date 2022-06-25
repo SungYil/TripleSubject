@@ -112,18 +112,18 @@ public class ReviewService {
 
         //포인트 계산
         int point = 0;
-        if(review.getContent().length() > 0 && eventDto.getContent().isEmpty()){
+        if(!review.getContent().isEmpty() && eventDto.getContent().isEmpty()){
             point --;
         }
-        if(!review.getContent().isEmpty() && eventDto.getContent().length() > 0){
+        if(review.getContent().isEmpty() && !eventDto.getContent().isEmpty()){
             point++;
         }
 
-        List<Image> images=imageRepository.findByReviewId(review.getId());
-        if(images.size()>0 && eventDto.getAttachedPhotoIds().size()==0){
+        int imageSize=imageRepository.countByReviewId(review.getId());
+        if(imageSize>0 && eventDto.getAttachedPhotoIds().size()==0){
             point --;
         }
-        if(images.size()==0 && eventDto.getAttachedPhotoIds().size()>0){
+        if(imageSize==0 && eventDto.getAttachedPhotoIds().size()>0){
             point++;
         }
 
