@@ -3,6 +3,7 @@ package com.triple.TripleSubject.repositories;
 import com.triple.TripleSubject.entities.Place;
 import com.triple.TripleSubject.entities.Review;
 import com.triple.TripleSubject.entities.User;
+import com.triple.TripleSubject.enums.ReviewState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
     @Query(value="select r from Review r join Place p on r.place = p.id join User u on r.creator = u.id where p.id=:placeId AND u.id=:userId AND r.state=0")
     Review findByUserIdWithPlaceId(long userId, long placeId);
 
-    List<Review> findByPlaceId(long placeId);
+    @Query(value="select r from Review r join Place p on r.place=p.id where p.id=:placeId AND r.state=:state")
+    List<Review> findByPlaceId(long placeId, ReviewState state);
 }

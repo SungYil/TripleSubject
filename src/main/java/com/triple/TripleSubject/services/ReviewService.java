@@ -56,7 +56,7 @@ public class ReviewService {
 
         //포인트 계산
         int point=0;
-        if(reviewRepository.findByPlaceId(place.getId()).isEmpty()){
+        if(reviewRepository.findByPlaceId(place.getId(),ReviewState.alive).isEmpty()){
             point++;
         }
         if(!eventDto.getAttachedPhotoIds().isEmpty()){
