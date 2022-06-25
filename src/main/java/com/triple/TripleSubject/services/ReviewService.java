@@ -130,7 +130,7 @@ public class ReviewService {
         if(imageSize>0 && eventDto.getAttachedPhotoIds().isEmpty()){
             point --;
         }
-        if(imageSize==0 && eventDto.getAttachedPhotoIds().size()>0){
+        if(imageSize==0 && !eventDto.getAttachedPhotoIds().isEmpty()){
             point++;
         }
 
