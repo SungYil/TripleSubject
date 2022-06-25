@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
-    @Query(value="select u from User u where u.uuid=:uuid")
     User findByUuid(String uuid);
+
+    boolean existsByUuid(String uuid);
 }

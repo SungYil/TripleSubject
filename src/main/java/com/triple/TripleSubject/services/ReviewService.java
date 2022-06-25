@@ -4,6 +4,7 @@ import com.triple.TripleSubject.dtos.EventDto;
 import com.triple.TripleSubject.entities.*;
 import com.triple.TripleSubject.enums.ReviewState;
 import com.triple.TripleSubject.exceptions.DataNotFoundException;
+import com.triple.TripleSubject.exceptions.DuplicatedException;
 import com.triple.TripleSubject.exceptions.ValidationException;
 import com.triple.TripleSubject.repositories.*;
 import com.triple.TripleSubject.util.Validator;
@@ -36,9 +37,6 @@ public class ReviewService {
     @Autowired
     private Validator validator;
 
-    @Autowired
-    private Duplicator duplicator;
-
     @Transactional
     public EventDto postAddReview(EventDto eventDto){
         validating(eventDto);
@@ -49,14 +47,14 @@ public class ReviewService {
 
         //장소가 이미 존재하는지 검사
         Place place=Place.builder().uuid(eventDto.getPlaceId()).build();
-        if(duplicator.placeDuplicatedCheck(place))
+        if(!placeRepository.existsByUuid(eventDto.getPlaceId()))
             placeRepository.save(place);
         else
             place=placeRepository.findByUuid(eventDto.getPlaceId());
 
         //포인트 계산
         int point=0;
-        if(reviewRepository.findByPlaceId(place.getId(),ReviewState.alive).isEmpty()){
+        if(reviewRepository.findByPlaceIdAndState(place.getId(),ReviewState.alive).isEmpty()){
             point++;
         }
         if(!eventDto.getAttachedPhotoIds().isEmpty()){
@@ -68,17 +66,20 @@ public class ReviewService {
 
         //유저가 이미 존재하는지 검사
         User user=User.builder().uuid(eventDto.getUserId()).achievePoint(point).build();
-        if(duplicator.userDuplicatedCheck(user))
+        if(!userRepository.existsByUuid(eventDto.getUserId()))
             userRepository.save(user);
         else {
             user = userRepository.findByUuid(eventDto.getUserId());
             user.setAchievePoint(user.getAchievePoint() + point);
         }
-        duplicator.reviewDuplicatedCheck(user,place,"해당 장소에 대한 리뷰를 이미 작성했습니다.");
+
+        if(reviewRepository.existsByCreatorAndPlaceAndState(user,place,ReviewState.alive))
+            throw new DuplicatedException("해당 장소에 대한 리뷰를 이미 작성했습니다.");
 
         Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
-        if(reviewRepository.existsByUuid(eventDto.getReviewId())!=null)
+
+        if(reviewRepository.existsByUuidAndState(eventDto.getReviewId(),ReviewState.alive))
             throw new ValidationException("reviewId가 존재합니다.");
         
         Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
@@ -104,7 +105,7 @@ public class ReviewService {
         Place place = placeRepository.findByUuid(eventDto.getPlaceId());
         if(place==null) throw new DataNotFoundException("일치하는 placeId가 없습니다.");
 
-        Review review = reviewRepository.existsByUuid(eventDto.getReviewId());
+        Review review = reviewRepository.findByUuidAndState(eventDto.getReviewId(),ReviewState.alive);
         if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         User user = userRepository.findByUuid(eventDto.getUserId());
@@ -163,13 +164,13 @@ public class ReviewService {
         User user = userRepository.findByUuid(eventDto.getUserId());
         if(user == null) throw new DataNotFoundException("일치하는 userId가 없습니다.");
 
-        Review review = reviewRepository.existsByUuid(eventDto.getReviewId());
+        Review review = reviewRepository.findByUuidAndState(eventDto.getReviewId(),ReviewState.alive);
         if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
         if(!review.getCreator().getUuid().equals(user.getUuid()))
             throw new ValidationException("리뷰 작성자가 아닙니다.");
 
-        List<Event> event=eventRepository.findByUserId(user.getId(),place.getId());
+        List<Event> event=eventRepository.findByUserAndPlace(user,place);
         if(event == null)return;
         int point=0;
         for(Event e: event) {

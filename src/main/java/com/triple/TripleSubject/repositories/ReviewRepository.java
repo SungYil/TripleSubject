@@ -5,19 +5,18 @@ import com.triple.TripleSubject.entities.Review;
 import com.triple.TripleSubject.entities.User;
 import com.triple.TripleSubject.enums.ReviewState;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review,Long> {
-    @Query(value="select r from Review r where r.state=0 and r.uuid=:uuid")
-    Review existsByUuid(String uuid);
+    Review findByUuidAndState(String uuid,ReviewState state);
 
-    @Query(value="select r from Review r join Place p on r.place = p.id join User u on r.creator = u.id where p.id=:placeId AND u.id=:userId AND r.state=0")
-    Review findByUserIdWithPlaceId(long userId, long placeId);
+    List<Review> findByPlaceIdAndState(long placeId, ReviewState state);
 
-    @Query(value="select r from Review r join Place p on r.place=p.id where p.id=:placeId AND r.state=:state")
-    List<Review> findByPlaceId(long placeId, ReviewState state);
+    boolean existsByUuidAndState(String uuid,ReviewState state);
+
+    boolean existsByCreatorAndPlaceAndState(User user,Place place,ReviewState state);
+
 }
