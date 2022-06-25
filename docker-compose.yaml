@@ -1,0 +1,19 @@
+version: "3.0"
+services:
+  app:
+    image: triple
+    build:
+      context: .
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/triple?characterEncoding=UTF-8
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0.29-debian
+    volumes:
+      - ./Triple_DDL.txt:/docker-entrypoint-initdb.d/ddl.sql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: triple
