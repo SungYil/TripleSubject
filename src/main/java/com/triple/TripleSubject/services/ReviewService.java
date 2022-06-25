@@ -167,6 +167,9 @@ public class ReviewService {
         Review review = reviewRepository.findByUuidAndState(eventDto.getReviewId(),ReviewState.alive);
         if(review == null) throw new DataNotFoundException("일치하는 reviewId가 없습니다.");
 
+        if(!review.getPlace().getUuid().equals(eventDto.getPlaceId()))
+            throw new ValidationException("해당 장소에 대한 리뷰가 아닙니다.");
+
         if(!review.getCreator().getUuid().equals(user.getUuid()))
             throw new ValidationException("리뷰 작성자가 아닙니다.");
 
