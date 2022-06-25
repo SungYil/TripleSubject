@@ -80,7 +80,7 @@ public class ReviewService {
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
 
         if(reviewRepository.existsByUuidAndState(eventDto.getReviewId(),ReviewState.alive))
-            throw new ValidationException("reviewId가 존재합니다.");
+            throw new DuplicatedException("reviewId가 존재합니다.");
         
         Event event=Event.builder().review(review).user(user).event(eventDto).pointDelta(point).place(place).build();
 
