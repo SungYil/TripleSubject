@@ -12,7 +12,7 @@ import javax.persistence.*;
 @SuperBuilder
 public class Place {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column

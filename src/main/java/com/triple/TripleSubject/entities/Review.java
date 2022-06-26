@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(indexes = @Index(name="idx_creator_place",columnList = "creator_id,place_id"))
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
