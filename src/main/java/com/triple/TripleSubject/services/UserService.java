@@ -36,7 +36,6 @@ public class UserService {
 
         User user=userRepository.findByUuid(userId);
         if(user==null)throw new DataNotFoundException("일치하는 User가 없습니다.");
-        System.out.println(userId+"==================================");
         return new UserPointResponse(user.getUuid(),user.getAchievePoint());
     }
 }

@@ -76,7 +76,7 @@ public class ReviewService {
         if(reviewRepository.existsByCreatorAndPlaceAndState(user,place,ReviewState.alive))
             throw new DuplicatedException("해당 장소에 대한 리뷰를 이미 작성했습니다.");
 
-        Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
+        Review review=Review.builder().uuid(eventDto.getReviewId()).creator(user).accessCount(1)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
 
         if(reviewRepository.existsByUuidAndState(eventDto.getReviewId(),ReviewState.alive))
@@ -140,7 +140,7 @@ public class ReviewService {
         review.setState(ReviewState.notAlive);
         reviewRepository.save(review);
 
-        review=Review.builder().uuid(eventDto.getReviewId()).creator(user)
+        review=Review.builder().uuid(eventDto.getReviewId()).creator(user).accessCount(review.getAccessCount()+1)
                 .place(place).state(ReviewState.alive).content(eventDto.getContent()).build();
         reviewRepository.save(review);
 
@@ -183,6 +183,7 @@ public class ReviewService {
         user.setAchievePoint(user.getAchievePoint()-point);
         userRepository.save(user);
 
+        review.setAccessCount(review.getAccessCount()+1);
         review.setState(ReviewState.notAlive);
         reviewRepository.save(review);
 

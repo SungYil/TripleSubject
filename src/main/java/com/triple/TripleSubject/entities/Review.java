@@ -32,4 +32,7 @@ public class Review {
 
     @Column
     private ReviewState state;
+
+    @Column
+    long accessCount;
 }
