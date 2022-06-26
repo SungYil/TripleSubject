@@ -52,9 +52,18 @@ public class ReviewService {
         else
             place=placeRepository.findByUuid(eventDto.getPlaceId());
 
+        //유저가 이미 존재하는지 검사
+        User user=User.builder().uuid(eventDto.getUserId()).achievePoint(0).build();
+        //user.setAchievePoint(point);
+        if(!userRepository.existsByUuid(eventDto.getUserId()))
+            userRepository.save(user);
+        else {
+            user = userRepository.findByUuid(eventDto.getUserId());
+            //user.setAchievePoint(user.getAchievePoint() + point);
+        }
         //포인트 계산
         int point=0;
-        if(reviewRepository.findByPlaceIdAndState(place.getId(),ReviewState.alive).isEmpty()){
+        if(reviewRepository.findByCreatorAndPlaceAndState(user,place,ReviewState.alive).isEmpty()){
             point++;
         }
         if(!eventDto.getAttachedPhotoIds().isEmpty()){
@@ -64,14 +73,8 @@ public class ReviewService {
             point++;
         }
 
-        //유저가 이미 존재하는지 검사
-        User user=User.builder().uuid(eventDto.getUserId()).achievePoint(point).build();
-        if(!userRepository.existsByUuid(eventDto.getUserId()))
-            userRepository.save(user);
-        else {
-            user = userRepository.findByUuid(eventDto.getUserId());
-            user.setAchievePoint(user.getAchievePoint() + point);
-        }
+        user.setAchievePoint(user.getAchievePoint()+point);
+        userRepository.save(user);
 
         if(reviewRepository.existsByCreatorAndPlaceAndState(user,place,ReviewState.alive))
             throw new DuplicatedException("해당 장소에 대한 리뷰를 이미 작성했습니다.");

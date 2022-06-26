@@ -13,7 +13,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review,Long> {
     Review findByUuidAndState(String uuid,ReviewState state);
 
-    List<Review> findByPlaceIdAndState(long placeId, ReviewState state);
+    List<Review> findByCreatorAndPlaceAndState(User user,Place place, ReviewState state);
 
     boolean existsByUuidAndState(String uuid,ReviewState state);
 

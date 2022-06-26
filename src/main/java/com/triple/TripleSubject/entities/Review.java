@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @SuperBuilder
+@Table(indexes = @Index(name="idx_creator_place",columnList = "creator_id,place_id"))
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +24,7 @@ public class Review {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
+    @JoinColumn
     private Place place;
 
     @ManyToOne(fetch = FetchType.LAZY)
