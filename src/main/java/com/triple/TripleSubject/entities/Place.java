@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @SuperBuilder
+@Table(indexes = @Index(name="idx_uuid",columnList = "uuid"))
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

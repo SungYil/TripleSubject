@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @SuperBuilder
+@Table(indexes = @Index(name="idx_user_place",columnList = "user_id,place_id"))
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @SuperBuilder
+@Table(indexes = @Index(name="idx_review",columnList = "review_id"))
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
