@@ -18,6 +18,14 @@ JPA 2.7.0
 MySQL 8.0.29
 
 gradle 7.4.1
+-------
+### 실행방법
+
+```
+$ git clone https://github.com/SungYil/triple-subject.git
+$ cd triple-subject
+$ docker-compose up
+```
 
 -------
 ### API 문서
@@ -39,10 +47,10 @@ Code 200 조회 성공
 
 Example Value
 ```
-   {
+   [{
     "userUuid" : "string",
     "point" : 0
-   }
+   }]
 ```
 
 ------------------
@@ -100,6 +108,8 @@ Code 400 등록 실패
     "message" : "userId 형식이 유효하지 않습니다"
      or "placeId 형식이 유효하지 않습니다." 
     or "attachedPhotoIds 형식이 유효하지 않습니다" 
+    or "imageId 형식이 유효하지 않습니다"
+    or 
    }
 ```
 
@@ -107,6 +117,7 @@ Code 409 등록 실패
 ```
    {
     "message" : "해당 장소에 대한 리뷰를 이미 작성했습니다."
+    or "reviewId가 존재합니다"
    }
 ```
 -----------------
@@ -132,6 +143,8 @@ Code 400 수정 실패
     "message" : "userId 형식이 유효하지 않습니다" 
     or "placeId 형식이 유효하지 않습니다." 
     or "attachedPhotoIds 형식이 유효하지 않습니다"
+    or "리뷰작성자가 아닙니다"
+    or "해당 장소에 대한 리뷰가 아닙니다"
    }
 ```
 
@@ -159,6 +172,7 @@ Code 400 삭제 실패
     or "placeId 형식이 유효하지 않습니다." 
     or "attachedPhotoIds 형식이 유효하지 않습니다"
     or "리뷰작성자가 아닙니다"
+    or "해당 장소에 대한 리뷰가 아닙니다"
    }
 ```
 
