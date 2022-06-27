@@ -18,13 +18,16 @@ public class EventController {
 
     @RequestMapping(method = RequestMethod.POST)
     public EventDto postEvent(@RequestBody EventDto eventDto){
-
-        if (EventAction.ADD.name().equals(eventDto.getAction())) {
-            reviewService.postAddReview(eventDto);
-        }else if(EventAction.MOD.name().equals(eventDto.getAction())){
-            reviewService.postModReview(eventDto);
-        }else if(EventAction.DELETE.name().equals(eventDto.getAction())){
-            reviewService.postDeleteReview(eventDto);
+        switch (EventAction.valueOf(eventDto.getAction())){
+            case ADD:
+                reviewService.postAddReview(eventDto);
+                break;
+            case MOD:
+                reviewService.postModReview(eventDto);
+                break;
+            case DELETE:
+                reviewService.postDeleteReview(eventDto);
+                break;
         }
 
         return eventDto;
