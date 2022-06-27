@@ -2,6 +2,7 @@ package com.triple.TripleSubject.controllers;
 
 import com.triple.TripleSubject.dtos.EventDto;
 import com.triple.TripleSubject.enums.EventAction;
+import com.triple.TripleSubject.exceptions.DataNotFoundException;
 import com.triple.TripleSubject.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,16 +19,22 @@ public class EventController {
 
     @RequestMapping(method = RequestMethod.POST)
     public EventDto postEvent(@RequestBody EventDto eventDto){
-        switch (EventAction.valueOf(eventDto.getAction())){
-            case ADD:
-                reviewService.postAddReview(eventDto);
-                break;
-            case MOD:
-                reviewService.postModReview(eventDto);
-                break;
-            case DELETE:
-                reviewService.postDeleteReview(eventDto);
-                break;
+        if(eventDto==null)throw new DataNotFoundException("요청 데이터가 없습니다");
+        try {
+            switch (EventAction.valueOf(eventDto.getAction())) {
+                case ADD:
+                    reviewService.postAddReview(eventDto);
+                    break;
+                case MOD:
+                    reviewService.postModReview(eventDto);
+                    break;
+                case DELETE:
+                    reviewService.postDeleteReview(eventDto);
+                    break;
+            }
+        }
+        catch(IllegalArgumentException e){
+            throw new DataNotFoundException("알수 없는 요청입니다.");
         }
 
         return eventDto;
