@@ -108,8 +108,7 @@ Code 400 등록 실패
     "message" : "userId 형식이 유효하지 않습니다"
      or "placeId 형식이 유효하지 않습니다." 
     or "attachedPhotoIds 형식이 유효하지 않습니다" 
-    or "imageId 형식이 유효하지 않습니다"
-    or 
+    or "imageId 형식이 유효하지 않습니다."
    }
 ```
 
@@ -184,4 +183,3 @@ Code 404 삭제 실패
     or "일치하는 placeId가 없습니다."
    }
 ```
-# triple-subject
